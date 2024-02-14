@@ -5,12 +5,12 @@ import { ConferenceData } from '../../../providers/conference-data';
 import { UserData } from '../../../providers/user-data';
 
 @Component({
-  selector: 'patent-detail',
-  styleUrls: ['./detail.scss'],
-  templateUrl: 'detail.html'
+  selector: 'patent-form',
+  styleUrls: ['./form.scss'],
+  templateUrl: 'form.html'
 })
-export class DetailPage {
-  detail: any;
+export class FormPage {
+  form: any;
   isFavorite = false;
   defaultHref = '';
 
@@ -26,12 +26,12 @@ export class DetailPage {
         const patentId = this.route.snapshot.paramMap.get('patentId');
         for (const group of data.schedule[0].groups) {
           if (group && group.sessions) {
-            for (const detail of group.sessions) {
-              if (detail && detail.id === patentId) {
-                this.detail = detail;
+            for (const form of group.sessions) {
+              if (form && form.id === patentId) {
+                this.form = form;
 
                 this.isFavorite = this.userProvider.hasFavorite(
-                  this.detail.name
+                  this.form.name
                 );
 
                 break;
@@ -52,16 +52,16 @@ export class DetailPage {
   }
 
   toggleFavorite() {
-    if (this.userProvider.hasFavorite(this.detail.name)) {
-      this.userProvider.removeFavorite(this.detail.name);
+    if (this.userProvider.hasFavorite(this.form.name)) {
+      this.userProvider.removeFavorite(this.form.name);
       this.isFavorite = false;
     } else {
-      this.userProvider.addFavorite(this.detail.name);
+      this.userProvider.addFavorite(this.form.name);
       this.isFavorite = true;
     }
   }
 
   shareSession() {
-    console.log('Clicked share detail');
+    console.log('Clicked share form');
   }
 }

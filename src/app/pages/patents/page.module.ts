@@ -7,6 +7,7 @@ import { Page } from "./page";
 import { FilterPage } from "./filter/filter";
 import { PageRoutingModule } from "./routing.module";
 import { DetailModule } from "./detail/detail.module";
+import { FormModule } from "./form/form.module";
 
 @NgModule({
   imports: [
@@ -14,9 +15,10 @@ import { DetailModule } from "./detail/detail.module";
     FormsModule,
     IonicModule,
     DetailModule,
+    FormModule,
     PageRoutingModule,
   ],
-  exports: [DetailModule],
+  exports: [DetailModule, FormsModule],
   declarations: [Page, FilterPage],
 })
 export class Module {}

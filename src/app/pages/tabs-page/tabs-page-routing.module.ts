@@ -31,8 +31,16 @@ const routes: Routes = [
             component: PatentsPage,
           },
           {
-            path: ':sessionId',
+            path: ':patentId',
             loadChildren: () => import('../patents/detail/detail.module').then(m => m.DetailModule)
+          },
+          {
+            path: 'add',
+            loadChildren: () => import('../patents/form/form.module').then(m => m.FormModule)
+          },
+          {
+            path: 'edit/:patentId',
+            loadChildren: () => import('../patents/form/form.module').then(m => m.FormModule)
           }
         ]
       },
