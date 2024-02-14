@@ -31,8 +31,8 @@ const routes: Routes = [
             component: PatentsPage,
           },
           {
-            path: 'session/:sessionId',
-            loadChildren: () => import('../session-detail/session-detail.module').then(m => m.SessionDetailModule)
+            path: ':sessionId',
+            loadChildren: () => import('../patents/detail/detail.module').then(m => m.DetailModule)
           }
         ]
       },

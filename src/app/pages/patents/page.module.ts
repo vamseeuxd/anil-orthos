@@ -1,22 +1,22 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { IonicModule } from "@ionic/angular";
 
-import { Page } from './page';
-import { FilterPage } from './filter/filter';
-import { PageRoutingModule } from './routing.module';
+import { Page } from "./page";
+import { FilterPage } from "./filter/filter";
+import { PageRoutingModule } from "./routing.module";
+import { DetailModule } from "./detail/detail.module";
 
 @NgModule({
-    imports: [
-        CommonModule,
-        FormsModule,
-        IonicModule,
-        PageRoutingModule
-    ],
-    declarations: [
-        Page,
-        FilterPage
-    ]
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    DetailModule,
+    PageRoutingModule,
+  ],
+  exports: [DetailModule],
+  declarations: [Page, FilterPage],
 })
-export class Module { }
+export class Module {}
