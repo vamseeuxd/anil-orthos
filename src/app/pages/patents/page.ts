@@ -2,16 +2,16 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, IonList, IonRouterOutlet, LoadingController, ModalController, ToastController, Config } from '@ionic/angular';
 
-import { ScheduleFilterPage } from '../schedule-filter/schedule-filter';
+import { FilterPage } from './filter/filter';
 import { ConferenceData } from '../../providers/conference-data';
 import { UserData } from '../../providers/user-data';
 
 @Component({
-  selector: 'page-schedule',
-  templateUrl: 'schedule.html',
-  styleUrls: ['./schedule.scss'],
+  selector: 'page-patents',
+  templateUrl: 'page.html',
+  styleUrls: ['./page.scss'],
 })
-export class SchedulePage implements OnInit {
+export class Page implements OnInit {
   // Gets a reference to the list element
   @ViewChild('scheduleList', { static: true }) scheduleList: IonList;
 
@@ -44,7 +44,7 @@ export class SchedulePage implements OnInit {
   }
 
   updateSchedule() {
-    // Close any open sliding items when the schedule updates
+    // Close any open sliding items when the patents updates
     if (this.scheduleList) {
       this.scheduleList.closeSlidingItems();
     }
@@ -57,7 +57,7 @@ export class SchedulePage implements OnInit {
 
   async presentFilter() {
     const modal = await this.modalCtrl.create({
-      component: ScheduleFilterPage,
+      component: FilterPage,
       presentingElement: this.routerOutlet.nativeEl,
       componentProps: { excludedTracks: this.excludeTracks }
     });
