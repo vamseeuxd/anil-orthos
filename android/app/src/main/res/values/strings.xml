@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">anil-orthos</string>
+    <string name="title_activity_main">anil-orthos</string>
+    <string name="package_name">ionic.conference.app</string>
+    <string name="custom_url_scheme">ionic.conference.app</string>
+</resources>
