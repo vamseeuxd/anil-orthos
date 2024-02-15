@@ -57,7 +57,7 @@
 
       <ion-item-sliding *ngFor="let session of group.sessions" #slidingItem [attr.track]="session.tracks[0] | lowercase"
         [hidden]="session.hide">
-        <ion-item routerLink="/app/tabs/patents/{{session.id}}">
+        <ion-item routerLink="/app/tabs/patents/details/{{session.id}}">
           <ion-label>
             <h3>{{session.name}}</h3>
             <p>
@@ -67,7 +67,7 @@
         </ion-item>
         <ion-item-options>
           <ion-item-option (click)="closeSlidingItem(slidingItem)" routerLink="/app/tabs/patents/edit/{{session.id}}">
-            Edit
+            Edit Patent
           </ion-item-option>
           <ion-item-option color="favorite" (click)="addFavorite(slidingItem, session)" *ngIf="segment === 'all'">
             Favorite

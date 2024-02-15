@@ -31,7 +31,7 @@ const routes: Routes = [
             component: PatentsPage,
           },
           {
-            path: ':patentId',
+            path: 'details/:patentId',
             loadChildren: () => import('../patents/detail/detail.module').then(m => m.DetailModule)
           },
           {

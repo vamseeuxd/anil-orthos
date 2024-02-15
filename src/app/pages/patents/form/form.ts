@@ -1,67 +1,35 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
-import { ActivatedRoute } from '@angular/router';
-import { ConferenceData } from '../../../providers/conference-data';
-import { UserData } from '../../../providers/user-data';
+import { ActivatedRoute } from "@angular/router";
+import { ConferenceData } from "../../../providers/conference-data";
+import { UserData } from "../../../providers/user-data";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
-  selector: 'patent-form',
-  styleUrls: ['./form.scss'],
-  templateUrl: 'form.html'
+  selector: "patent-form",
+  styleUrls: ["./form.scss"],
+  templateUrl: "form.html",
 })
 export class FormPage {
   form: any;
   isFavorite = false;
-  defaultHref = '';
+  defaultHref = "";
+  model: any = {}; // Object to hold form data
 
-  constructor(
-    private dataProvider: ConferenceData,
-    private userProvider: UserData,
-    private route: ActivatedRoute
-  ) { }
+  patentForm: FormGroup;
+
+  constructor(private route: ActivatedRoute) {}
 
   ionViewWillEnter() {
-    this.dataProvider.load().subscribe((data: any) => {
-      if (data && data.schedule && data.schedule[0] && data.schedule[0].groups) {
-        const patentId = this.route.snapshot.paramMap.get('patentId');
-        for (const group of data.schedule[0].groups) {
-          if (group && group.sessions) {
-            for (const form of group.sessions) {
-              if (form && form.id === patentId) {
-                this.form = form;
+    const patentId = this.route.snapshot.paramMap.get("patentId");
+  }
 
-                this.isFavorite = this.userProvider.hasFavorite(
-                  this.form.name
-                );
-
-                break;
-              }
-            }
-          }
-        }
-      }
-    });
+  onSubmit() {
+    // Handle form submission, e.g., send data to backend
+    console.log("Form submitted:", this.model);
   }
 
   ionViewDidEnter() {
     this.defaultHref = `/app/tabs/patents`;
-  }
-
-  sessionClick(item: string) {
-    console.log('Clicked', item);
-  }
-
-  toggleFavorite() {
-    if (this.userProvider.hasFavorite(this.form.name)) {
-      this.userProvider.removeFavorite(this.form.name);
-      this.isFavorite = false;
-    } else {
-      this.userProvider.addFavorite(this.form.name);
-      this.isFavorite = true;
-    }
-  }
-
-  shareSession() {
-    console.log('Clicked share form');
   }
 }
