@@ -5,52 +5,125 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<!-- prettier-ignore -->
 <ion-content>
-  <form (ngSubmit)="onSubmit()" #addOrRemoveForm="ngForm">
-    <div class="ion-padding">
-      <app-auto-complete></app-auto-complete>
-    </div>
-    <div class="ion-padding">
-      <app-country-state-city></app-country-state-city>
-    </div>
-    <div class="ion-padding">
-      <ion-input label="Full Name" label-placement="floating" fill="outline" placeholder="Full Name" [(ngModel)]="model.name" name="name" type="text" required ></ion-input>
-    </div>
-    <div class="ion-padding">
-      <ion-select label="Gender" label-placement="floating" fill="outline" [(ngModel)]="model.gender" name="gender" required >
-        <ion-select-option value="male">Male</ion-select-option>
-        <ion-select-option value="female">Female</ion-select-option>
-        <ion-select-option value="other">Other</ion-select-option>
-      </ion-select>
-    </div>
-    <div class="ion-padding">
-      <ion-input label="Date of Birth" value="{{model.age | date:'dd-MMMM-yyyy'}}" readonly (click)="dateTimeButtonRef.present()" label-placement="floating" fill="outline" placeholder="Enter text"  type="text"></ion-input>
-        <ion-datetime-button hidden datetime="datetime"></ion-datetime-button>
-        <ion-modal #dateTimeButtonRef [keepContentsMounted]="true">
-          <ng-template>
-            <ion-datetime required [(ngModel)]="model.age" name="age" presentation="date" id="datetime" [showDefaultButtons]="true"></ion-datetime>
-          </ng-template>
-      </ion-modal>
-    </div>
-    <div class="ion-padding">
-      <ion-input label="Mobile" label-placement="floating" fill="outline" placeholder="Enter text" [(ngModel)]="model.mobile" name="mobile" type="tel" required ></ion-input>
-    </div>
-    <div class="ion-padding">
-      <ion-input label="Street" label-placement="floating" fill="outline" placeholder="Enter text" [(ngModel)]="model.street" name="street" type="text" required ></ion-input>
-    </div>
-    <div class="ion-padding">
-      <ion-input label="City" label-placement="floating" fill="outline" placeholder="Enter text" [(ngModel)]="model.city" name="city" type="text" required ></ion-input>
-    </div>
-    <div class="ion-padding">
-      <ion-select label="State" label-placement="floating" fill="outline" [(ngModel)]="model.state" name="state" required >
-        <ion-select-option value="india">Andhra Pradesh</ion-select-option>
-      </ion-select>
-    </div>
-    <div class="ion-padding">
-      <ion-select label="Country" label-placement="floating" fill="outline" [(ngModel)]="model.country" name="country" required >
-        <ion-select-option value="india">India</ion-select-option>
-      </ion-select>
+  <form
+    class="container-fluid py-3"
+    #form="ngForm"
+    (ngSubmit)="submitForm(form)"
+  >
+    <div class="row">
+      <div class="col-md-12">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput name="name" ngModel required />
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-12">
+          <mat-label>Gender</mat-label>
+          <mat-radio-group name="gender" ngModel required class="w-100">
+            <mat-radio-button value="male">Male</mat-radio-button>
+            <mat-radio-button value="female">Female</mat-radio-button>
+          </mat-radio-group>
+      </div>
+
+      <div class="col-md-12">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Age</mat-label>
+          <input matInput type="number" name="age" ngModel required />
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-12">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Mobile</mat-label>
+          <input
+            matInput
+            type="tel"
+            name="mobile"
+            ngModel
+            required
+            pattern="^[0-9]{10}$"
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-12">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Street</mat-label>
+          <input matInput name="street" ngModel required />
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-12">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Country</mat-label>
+          <input
+            matInput
+            name="country"
+            (input)="filterOptions($event, countrySearch)"
+            ngModel
+            required
+            [matAutocomplete]="countryAuto"
+          />
+          <mat-autocomplete
+            [displayWith]="displayWith.bind(this)"
+            (optionSelected)="filterStatesByCountry($event)"
+            #countryAuto="matAutocomplete"
+          >
+            @for (country of countries$ | async; track country.id) {
+            <mat-option [value]="country">{{ country.label }}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-12">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>State</mat-label>
+          <input
+            matInput
+            name="state"
+            (input)="filterOptions($event, statesSearch)"
+            ngModel
+            required
+            [matAutocomplete]="stateAuto"
+          />
+          <mat-autocomplete
+            [displayWith]="displayWith.bind(this)"
+            (optionSelected)="filterCitiesByState(form)"
+            #stateAuto="matAutocomplete"
+          >
+            @for (state of states$ | async; track state.id) {
+            <mat-option [value]="state">{{ state.label }}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-12">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>City</mat-label>
+          <input
+            matInput
+            name="city"
+            (input)="filterOptions($event, citiesSearch)"
+            ngModel
+            required
+            [matAutocomplete]="cityAuto"
+          />
+          <mat-autocomplete
+            [displayWith]="displayWith.bind(this)"
+            #cityAuto="matAutocomplete"
+          >
+            @for (city of cities$ | async; track city.id) {
+            <mat-option [value]="city">{{ city.label }}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+      <button mat-raised-button type="submit" color="primary">Submit</button>
     </div>
   </form>
 </ion-content>

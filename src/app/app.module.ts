@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
   imports: [
@@ -26,7 +27,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     }),
   ],
   declarations: [AppComponent],
-  providers: [InAppBrowser],
+  providers: [InAppBrowser, provideAnimationsAsync()],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

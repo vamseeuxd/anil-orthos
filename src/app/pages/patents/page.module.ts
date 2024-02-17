@@ -7,7 +7,7 @@ import { Page } from "./page";
 import { FilterPage } from "./filter/filter";
 import { PageRoutingModule } from "./routing.module";
 import { DetailModule } from "./detail/detail.module";
-import { FormModule } from "./form/form.module";
+import { FormPage } from "./form/form";
 
 @NgModule({
   imports: [
@@ -15,7 +15,7 @@ import { FormModule } from "./form/form.module";
     FormsModule,
     IonicModule,
     DetailModule,
-    FormModule,
+    FormPage,
     PageRoutingModule,
   ],
   exports: [DetailModule, FormsModule],
