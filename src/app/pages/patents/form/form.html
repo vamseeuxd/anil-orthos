@@ -9,6 +9,12 @@
 <ion-content>
   <form (ngSubmit)="onSubmit()" #addOrRemoveForm="ngForm">
     <div class="ion-padding">
+      <app-auto-complete></app-auto-complete>
+    </div>
+    <div class="ion-padding">
+      <app-country-state-city></app-country-state-city>
+    </div>
+    <div class="ion-padding">
       <ion-input label="Full Name" label-placement="floating" fill="outline" placeholder="Full Name" [(ngModel)]="model.name" name="name" type="text" required ></ion-input>
     </div>
     <div class="ion-padding">
@@ -21,10 +27,10 @@
     <div class="ion-padding">
       <ion-input label="Date of Birth" value="{{model.age | date:'dd-MMMM-yyyy'}}" readonly (click)="dateTimeButtonRef.present()" label-placement="floating" fill="outline" placeholder="Enter text"  type="text"></ion-input>
         <ion-datetime-button hidden datetime="datetime"></ion-datetime-button>
-      <ion-modal #dateTimeButtonRef [keepContentsMounted]="true">
-        <ng-template>
-          <ion-datetime required [(ngModel)]="model.age" name="age" presentation="date" id="datetime" [showDefaultButtons]="true"></ion-datetime>
-        </ng-template>
+        <ion-modal #dateTimeButtonRef [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime required [(ngModel)]="model.age" name="age" presentation="date" id="datetime" [showDefaultButtons]="true"></ion-datetime>
+          </ng-template>
       </ion-modal>
     </div>
     <div class="ion-padding">

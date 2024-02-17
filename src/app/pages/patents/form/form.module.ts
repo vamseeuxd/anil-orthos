@@ -5,6 +5,8 @@ import { FormPage } from './form';
 import { FormPageRoutingModule } from './form-routing.module';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AutoCompleteComponent } from '../../../shared/auto-complete/auto-complete.component';
+import { CountryStateCityComponent } from '../../../shared/country-state-city/country-state-city.component';
 
 @NgModule({
   imports: [
@@ -12,7 +14,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     IonicModule,
     FormsModule,
     ReactiveFormsModule,
-    FormPageRoutingModule
+    CountryStateCityComponent,
+    FormPageRoutingModule,
+    AutoCompleteComponent,
   ],
   declarations: [
     FormPage,

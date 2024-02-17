@@ -1,9 +1,7 @@
 import { Component } from "@angular/core";
 
 import { ActivatedRoute } from "@angular/router";
-import { ConferenceData } from "../../../providers/conference-data";
-import { UserData } from "../../../providers/user-data";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormGroup } from "@angular/forms";
 
 @Component({
   selector: "patent-form",

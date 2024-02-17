@@ -1,0 +1,12 @@
+ion-list {
+  position: absolute;
+  z-index: 1000;
+  width: calc(100% - 35px);
+  max-height: 250px;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--ion-border-color);
+}
+ion-item {
+  cursor: pointer;
+}
