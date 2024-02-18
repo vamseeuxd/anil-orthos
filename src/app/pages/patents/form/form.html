@@ -43,8 +43,10 @@
             name="mobile"
             ngModel
             required
+            maxlength="10"
             pattern="^[0-9]{10}$"
           />
+          <mat-hint align="end">Provide 10 digits Moile Number</mat-hint>
         </mat-form-field>
       </div>
 
@@ -124,9 +126,14 @@
       </div>
 
       <!-- <button mat-raised-button type="submit" color="primary">Submit</button> -->
-
-      <ion-button type="submit" expand="block">Block</ion-button>
-      <ion-button expand="full">Full</ion-button>
+      <div class="col-12">
+        <div class="row">
+          <div class="col">
+            <ion-button [disabled]="form.invalid" type="submit" expand="block">Save</ion-button>
+          </div>
+          <div class="col"><ion-button color="dark" expand="full">Cancel</ion-button></div>
+        </div>
+      </div>
     </div>
   </form>
 </ion-content>
