@@ -20,11 +20,11 @@
       </div>
 
       <div class="col-md-12">
-          <mat-label>Gender</mat-label>
-          <mat-radio-group name="gender" ngModel required class="w-100">
-            <mat-radio-button value="male">Male</mat-radio-button>
-            <mat-radio-button value="female">Female</mat-radio-button>
-          </mat-radio-group>
+        <mat-label>Gender</mat-label>
+        <mat-radio-group name="gender" ngModel required class="w-100">
+          <mat-radio-button value="male">Male</mat-radio-button>
+          <mat-radio-button value="female">Female</mat-radio-button>
+        </mat-radio-group>
       </div>
 
       <div class="col-md-12">
@@ -123,7 +123,10 @@
         </mat-form-field>
       </div>
 
-      <button mat-raised-button type="submit" color="primary">Submit</button>
+      <!-- <button mat-raised-button type="submit" color="primary">Submit</button> -->
+
+      <ion-button type="submit" expand="block">Block</ion-button>
+      <ion-button expand="full">Full</ion-button>
     </div>
   </form>
 </ion-content>
