@@ -1,75 +1,162 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Anil Ortho Hospital</ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content>
-  <ion-header class="ion-no-border">
-    <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-menu-button></ion-menu-button>
-      </ion-buttons>
-      <ion-buttons slot="end">
-        <ion-button (click)="presentPopover($event)">
-          <ion-icon slot="icon-only" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="hospital-outline" slot="start"></ion-icon>
+        About Anil Ortho Hospital
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>
+        Anil Ortho Hospital is dedicated to providing comprehensive and
+        compassionate orthopaedic care to patients in Amalapuram, East Godavari,
+        Andhra Pradesh, and surrounding areas. We understand the importance of a
+        healthy musculoskeletal system for an active and fulfilling life, and
+        our team of experienced professionals is committed to helping you
+        achieve and maintain optimal bone and joint health.
+      </p>
+    </ion-card-content>
+  </ion-card>
 
-  <div class="about-header">
-    <!-- Instead of loading an image each time the select changes, use opacity to transition them -->
-    <div class="about-image madison" [ngStyle]="location === 'madison' && {'opacity': '1'}"></div>
-    <div class="about-image austin" [ngStyle]="location === 'austin' && {'opacity': '1'}"></div>
-    <div class="about-image chicago" [ngStyle]="location === 'chicago' && {'opacity': '1'}"></div>
-    <div class="about-image seattle" [ngStyle]="location === 'seattle' && {'opacity': '1'}"></div>
-  </div>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="eye-outline" slot="start"></ion-icon>
+        Our Services
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item button (click)="navigateToServiceDetails('diagnosis')">
+          <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+          <ion-note
+            ><h2>
+              Expert Diagnosis and Treatment: We offer a wide range of
+              diagnostic services to accurately identify the source of your pain
+              or discomfort. Our team utilizes advanced techniques and equipment
+              to ensure a proper diagnosis, allowing us to recommend the most
+              effective treatment plan for your individual needs.
+            </h2></ion-note
+          >
+        </ion-item>
+        <ion-item button (click)="navigateToServiceDetails('surgery')">
+          <ion-icon name="pin-outline" slot="start"></ion-icon>
+          <ion-note
+            ><h2>
+              Non-surgical and Surgical Options: We believe in exploring all
+              avenues before recommending surgery. Our experienced doctors will
+              discuss various non-surgical options, such as physical therapy,
+              medication, and injections, whenever possible. However, if surgery
+              is deemed necessary, our skilled surgeons are equipped to perform
+              a variety of procedures with precision and care.
+            </h2></ion-note
+          >
+        </ion-item>
+        <ion-item button (click)="navigateToServiceDetails('care')">
+          <ion-icon name="heart-outline" slot="start"></ion-icon>
+          <ion-note
+            ><h2>
+              Comprehensive Care: We offer a comprehensive approach to
+              orthopaedic care, addressing not only the physical aspects of your
+              condition but also the emotional and psychological well-being. Our
+              team is committed to providing personalized attention and support
+              throughout your journey to recovery.
+            </h2></ion-note
+          >
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 
-  <div class="about-info">
-    <h3 class="ion-padding-top ion-padding-start">About</h3>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+        Why Choose Anil Ortho Hospital
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item lines="full">
+          <ion-icon name="people-outline" slot="start"></ion-icon>
+          <ion-note
+            ><h2>
+              Experienced and Qualified Team: Our team consists of highly
+              qualified and experienced orthopaedic surgeons, nurses, and
+              therapists who are passionate about providing exceptional patient
+              care.
+            </h2></ion-note
+          >
+        </ion-item>
+        <ion-item lines="full">
+          <ion-icon name="sparkles-outline" slot="start"></ion-icon>
+          <ion-note
+            ><h2>
+              Advanced Technology: We utilize the latest diagnostic and
+              treatment technologies to ensure accurate diagnosis and effective
+              treatment plans
+            </h2></ion-note
+          >
+        </ion-item>
+        <ion-item lines="full">
+          <ion-icon name="heart-half-outline" slot="start"></ion-icon>
+          <ion-note
+            ><h2>
+              Patient-Centered Approach: We believe in open communication and
+              shared decision-making. We take the time to listen to your
+              concerns and answer your questions thoroughly, ensuring you are
+              fully informed and involved in your treatment plan.
+            </h2></ion-note
+          >
+        </ion-item>
+        <ion-item lines="full">
+          <ion-icon name="home-outline" slot="start"></ion-icon>
+          <ion-note
+            ><h2>
+              Comfortable and Caring Environment: We strive to create a
+              welcoming and comfortable environment for our patients, focusing
+              on providing compassionate care and minimizing stress.
+            </h2></ion-note
+          >
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 
-    <p class="ion-padding-start ion-padding-end">
-      The Ionic Anil Orthos is a one-day conference on {{ conferenceDate | date: 'mediumDate' }} featuring talks from the Ionic team. It is focused on Ionic applications being built with Ionic Framework. This includes migrating apps to the latest version of the framework, Angular concepts, Webpack, Sass, and many other technologies used in Ionic 2. Tickets are completely sold out, and we’re expecting more than 1000 developers – making this the largest Ionic conference ever!
-    </p>
-
-    <h3 class="ion-padding-top ion-padding-start">Details</h3>
-
-    <ion-list lines="none">
-      <ion-item>
-        <ion-select label="Location" [(ngModel)]="location" [interfaceOptions]="selectOptions">
-          <ion-select-option value="madison">Madison, WI</ion-select-option>
-          <ion-select-option value="austin">Austin, TX</ion-select-option>
-          <ion-select-option value="chicago">Chicago, IL</ion-select-option>
-          <ion-select-option value="seattle">Seattle, WA</ion-select-option>
-        </ion-select>
-      </ion-item>
-      <ion-item button="true" id="open-date-input">
-        <ion-label>
-          Date
-        </ion-label>
-        <ion-text slot="end">{{ conferenceDate | date: 'mediumDate' }}</ion-text>
-        <ion-popover id="date-input-popover" trigger="open-date-input" [showBackdrop]="false" side="top" alignment="end">
-          <ng-template>
-            <ion-datetime max="2056" [(ngModel)]="conferenceDate" presentation="date"></ion-datetime>
-          </ng-template>
-        </ion-popover>
-      </ion-item>
-    </ion-list>
-
-    <h3 class="ion-padding-top ion-padding-start">Internet</h3>
-
-    <ion-list lines="none">
-      <ion-item>
-        <ion-label>
-          Wifi network
-        </ion-label>
-        <ion-label class="ion-text-end">
-          ica{{conferenceDate | date: 'y'}}
-        </ion-label>
-      </ion-item>
-      <ion-item>
-        <ion-label>
-          Password
-        </ion-label>
-        <ion-label class="ion-text-end">
-          makegoodthings
-        </ion-label>
-      </ion-item>
-    </ion-list>
-  </div>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="call-outline" slot="start"></ion-icon>
+        Contact Us
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item lines="full">
+          <ion-note
+            ><h2>
+              We encourage you to schedule an appointment with our team if you
+              are experiencing any pain, discomfort, or limitations related to
+              your bones, joints, muscles, or ligaments.
+            </h2></ion-note
+          >
+        </ion-item>
+        <ion-item lines="full">
+          <ion-label>Phone: [Hospital phone number]</ion-label>
+        </ion-item>
+        <ion-item lines="full">
+          <ion-label>Address: [Hospital address]</ion-label>
+        </ion-item>
+        <ion-item lines="full">
+          <ion-label>Website: [Hospital website, if available]</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

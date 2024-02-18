@@ -3,20 +3,26 @@
     <ion-buttons slot="start">
       <ion-back-button [defaultHref]="defaultHref"></ion-back-button>
     </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button (click)="toggleFavorite()">
-        <ion-icon *ngIf="!isFavorite" slot="icon-only" name="star-outline"></ion-icon>
-        <ion-icon *ngIf="isFavorite" slot="icon-only" name="star"></ion-icon>
-      </ion-button>
-      <ion-button (click)="shareSession()">
-        <ion-icon slot="icon-only" name="share"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div *ngIf="detail" class="ion-padding">
+  <ion-card *ngIf="patent">
+    <ion-card-header>
+      <ion-card-title> {{ patent.name }} </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>Gender : {{ patent.gender }}</p>
+      <p>Age: {{ patent.age }}</p>
+      <p>Street: {{ patent.street }}</p>
+      <p>City: {{ patent.city }}</p>
+      <p>State: {{ patent.state }}</p>
+      <p>Country: {{ patent.country }}</p>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- <div *ngIf="detail" class="ion-padding">
     <h1>{{detail.name}}</h1>
     <span *ngFor="let track of detail?.tracks" [class]="'detail-track-'+track.toLowerCase()">{{track}}</span>
     <p>{{detail.description}}</p>
@@ -43,5 +49,5 @@
     <ion-item (click)="sessionClick('leave feedback')" button>
       <ion-label color="primary">Leave Feedback</ion-label>
     </ion-item>
-  </ion-list>
+  </ion-list> -->
 </ion-content>

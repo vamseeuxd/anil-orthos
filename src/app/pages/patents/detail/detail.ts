@@ -1,67 +1,52 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, inject } from "@angular/core";
 
-import { ActivatedRoute } from '@angular/router';
-import { ConferenceData } from '../../../providers/conference-data';
-import { UserData } from '../../../providers/user-data';
+import { ActivatedRoute, Router } from "@angular/router";
+import {
+  Firestore,
+  DocumentReference,
+  collection,
+  collectionData,
+  doc,
+  getDoc,
+} from "@angular/fire/firestore";
+import { NgForm } from "@angular/forms";
+import { NavController, LoadingController } from "@ionic/angular";
+import { Observable } from "rxjs";
+import { IPatent } from "../IPatent";
 
 @Component({
-  selector: 'patent-detail',
-  styleUrls: ['./detail.scss'],
-  templateUrl: 'detail.html'
+  selector: "patent-detail",
+  styleUrls: ["./detail.scss"],
+  templateUrl: "detail.html",
 })
 export class DetailPage {
-  detail: any;
-  isFavorite = false;
-  defaultHref = '';
-
-  constructor(
-    private dataProvider: ConferenceData,
-    private userProvider: UserData,
-    private route: ActivatedRoute
-  ) { }
-
-  ionViewWillEnter() {
-    this.dataProvider.load().subscribe((data: any) => {
-      if (data && data.schedule && data.schedule[0] && data.schedule[0].groups) {
-        const patentId = this.route.snapshot.paramMap.get('patentId');
-        for (const group of data.schedule[0].groups) {
-          if (group && group.sessions) {
-            for (const detail of group.sessions) {
-              if (detail && detail.id === patentId) {
-                this.detail = detail;
-
-                this.isFavorite = this.userProvider.hasFavorite(
-                  this.detail.name
-                );
-
-                break;
-              }
-            }
-          }
-        }
-      }
+  defaultHref = "/app/tabs/patents";
+  firestore: Firestore = inject(Firestore);
+  loadingCtrl: LoadingController = inject(LoadingController);
+  patentDocRef: DocumentReference;
+  patent: IPatent;
+  patentId = "";
+  route: ActivatedRoute = inject(ActivatedRoute);
+  patentsCollection = collection(this.firestore, "patents");
+  constructor() {
+    const sub = this.route.params.subscribe(async ({ patentId }) => {
+      const loading = await this.showLoading();
+      this.patentId = patentId;
+      sub.unsubscribe();
+      this.patentDocRef = doc(
+        this.firestore,
+        `${this.patentsCollection.path}/${this.patentId}`
+      );
+      this.patent = (await getDoc(this.patentDocRef)).data() as IPatent;
+      await loading.dismiss();
     });
   }
-
-  ionViewDidEnter() {
-    this.defaultHref = `/app/tabs/patents`;
-  }
-
-  sessionClick(item: string) {
-    console.log('Clicked', item);
-  }
-
-  toggleFavorite() {
-    if (this.userProvider.hasFavorite(this.detail.name)) {
-      this.userProvider.removeFavorite(this.detail.name);
-      this.isFavorite = false;
-    } else {
-      this.userProvider.addFavorite(this.detail.name);
-      this.isFavorite = true;
-    }
-  }
-
-  shareSession() {
-    console.log('Clicked share detail');
+  async showLoading() {
+    const loading = await this.loadingCtrl.create({
+      message: "Please wait...",
+      duration: null,
+    });
+    loading.present();
+    return loading;
   }
 }

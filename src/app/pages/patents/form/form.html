@@ -1,139 +1,32 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button [defaultHref]="defaultHref"></ion-back-button>
+      <ion-back-button #backBtn [defaultHref]="defaultHref"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
+<!-- prettier-ignore -->
 <ion-content>
-  <form
-    class="container-fluid py-3"
-    #form="ngForm"
-    (ngSubmit)="submitForm(form)"
-  >
-    <div class="row">
-      <div class="col-md-12">
-        <mat-form-field class="w-100" appearance="outline">
-          <mat-label>Name</mat-label>
-          <input matInput name="name" ngModel required />
-        </mat-form-field>
-      </div>
-
-      <div class="col-md-12">
-        <mat-label>Gender</mat-label>
-        <mat-radio-group name="gender" ngModel required class="w-100">
-          <mat-radio-button value="male">Male</mat-radio-button>
-          <mat-radio-button value="female">Female</mat-radio-button>
-        </mat-radio-group>
-      </div>
-
-      <div class="col-md-12">
-        <mat-form-field class="w-100" appearance="outline">
-          <mat-label>Age</mat-label>
-          <input matInput type="number" name="age" ngModel required />
-        </mat-form-field>
-      </div>
-
-      <div class="col-md-12">
-        <mat-form-field class="w-100" appearance="outline">
-          <mat-label>Mobile</mat-label>
-          <input
-            matInput
-            type="tel"
-            name="mobile"
-            ngModel
-            required
-            maxlength="10"
-            pattern="^[0-9]{10}$"
-          />
-          <mat-hint align="end">Provide 10 digits Moile Number</mat-hint>
-        </mat-form-field>
-      </div>
-
-      <div class="col-md-12">
-        <mat-form-field class="w-100" appearance="outline">
-          <mat-label>Street</mat-label>
-          <input matInput name="street" ngModel required />
-        </mat-form-field>
-      </div>
-
-      <div class="col-md-12">
-        <mat-form-field class="w-100" appearance="outline">
-          <mat-label>Country</mat-label>
-          <input
-            matInput
-            name="country"
-            (input)="filterOptions($event, countrySearch)"
-            ngModel
-            required
-            [matAutocomplete]="countryAuto"
-          />
-          <mat-autocomplete
-            [displayWith]="displayWith.bind(this)"
-            (optionSelected)="filterStatesByCountry($event)"
-            #countryAuto="matAutocomplete"
-          >
-            @for (country of countries$ | async; track country.id) {
-            <mat-option [value]="country">{{ country.label }}</mat-option>
-            }
-          </mat-autocomplete>
-        </mat-form-field>
-      </div>
-
-      <div class="col-md-12">
-        <mat-form-field class="w-100" appearance="outline">
-          <mat-label>State</mat-label>
-          <input
-            matInput
-            name="state"
-            (input)="filterOptions($event, statesSearch)"
-            ngModel
-            required
-            [matAutocomplete]="stateAuto"
-          />
-          <mat-autocomplete
-            [displayWith]="displayWith.bind(this)"
-            (optionSelected)="filterCitiesByState(form)"
-            #stateAuto="matAutocomplete"
-          >
-            @for (state of states$ | async; track state.id) {
-            <mat-option [value]="state">{{ state.label }}</mat-option>
-            }
-          </mat-autocomplete>
-        </mat-form-field>
-      </div>
-
-      <div class="col-md-12">
-        <mat-form-field class="w-100" appearance="outline">
-          <mat-label>City</mat-label>
-          <input
-            matInput
-            name="city"
-            (input)="filterOptions($event, citiesSearch)"
-            ngModel
-            required
-            [matAutocomplete]="cityAuto"
-          />
-          <mat-autocomplete
-            [displayWith]="displayWith.bind(this)"
-            #cityAuto="matAutocomplete"
-          >
-            @for (city of cities$ | async; track city.id) {
-            <mat-option [value]="city">{{ city.label }}</mat-option>
-            }
-          </mat-autocomplete>
-        </mat-form-field>
-      </div>
-
-      <!-- <button mat-raised-button type="submit" color="primary">Submit</button> -->
-      <div class="col-12">
+  <form class="container-fluid py-3" #form="ngForm" (submit)="addPatent(form)">
+    <!--
+      helperText="Enter a valid 10 digits Mobile Number" errorText="Enter a valid 10 digits Mobile Number"
+    -->
+      <div class="mb-3 px-2"> <ion-input  required name="name"    label="Name"    label-placement="floating" fill="outline" ngModel></ion-input> </div>
+      <div class="mb-3 px-2"> <ion-select required name="gender"  label="Gender"  label-placement="floating" fill="outline" ngModel> <ion-select-option value="male">Male</ion-select-option> <ion-select-option value="female">Female</ion-select-option> <ion-select-option value="other">Other</ion-select-option> </ion-select> </div>
+      <div class="mb-3 px-2"> <ion-input  required name="age"     label="Age"     label-placement="floating" fill="outline" ngModel type="number" [min]="1" [max]="100"></ion-input> </div>
+      <div class="mb-3 px-2"> <ion-input  required name="mobile"  label="Mobile"  label-placement="floating" fill="outline" ngModel minlength="10" maxlength="10" type="tel" helperText="Enter a valid 10 digits Mobile Number" errorText="Enter a valid 10 digits Mobile Number"></ion-input> </div>
+      <div class="mb-3 px-2"> <ion-input  required name="street"  label="Street"  label-placement="floating" fill="outline" ngModel></ion-input> </div>
+      <div class="mb-3 px-2"> <ion-input  required name="city"    label="City"    label-placement="floating" fill="outline" ngModel></ion-input> </div>
+      <div class="mb-3 px-2"> <ion-input  required name="state"   label="State"   label-placement="floating" fill="outline" ngModel></ion-input> </div>
+      <div class="mb-3 px-2"> <ion-input  required name="country" label="Country" label-placement="floating" fill="outline" ngModel></ion-input> </div>
+      <div class="mb-3 px-2">
         <div class="row">
           <div class="col">
             <ion-button [disabled]="form.invalid" type="submit" expand="block">Save</ion-button>
           </div>
-          <div class="col"><ion-button color="dark" expand="full">Cancel</ion-button></div>
+          <div class="col"><ion-button color="dark" (click)="goBack()" expand="full">Cancel</ion-button></div>
         </div>
       </div>
-    </div>
   </form>
+
 </ion-content>

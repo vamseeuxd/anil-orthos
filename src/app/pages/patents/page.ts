@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from "@angular/core";
+import { Component, ViewChild, OnInit, inject } from "@angular/core";
 import { Router } from "@angular/router";
 import {
   AlertController,
@@ -13,6 +13,15 @@ import {
 import { FilterPage } from "./filter/filter";
 import { ConferenceData } from "../../providers/conference-data";
 import { UserData } from "../../providers/user-data";
+import {
+  Firestore,
+  collection,
+  collectionData,
+  deleteDoc,
+  doc,
+} from "@angular/fire/firestore";
+import { Observable } from "rxjs";
+import { IPatent } from "./IPatent";
 
 @Component({
   selector: "page-patents",
@@ -22,6 +31,12 @@ import { UserData } from "../../providers/user-data";
 export class Page implements OnInit {
   // Gets a reference to the list element
   @ViewChild("scheduleList", { static: true }) scheduleList: IonList;
+
+  firestore: Firestore = inject(Firestore);
+  patentsCollection = collection(this.firestore, "patents");
+  patents$: Observable<IPatent[]> = collectionData(this.patentsCollection, {
+    idField: "id",
+  }) as Observable<IPatent[]>;
 
   ios: boolean;
   dayIndex = 0;
@@ -49,6 +64,47 @@ export class Page implements OnInit {
     this.updateSchedule();
 
     this.ios = this.config.get("mode") === "ios";
+  }
+
+  async showLoading() {
+    const loading = await this.loadingCtrl.create({
+      message: "Please wait...",
+      duration: null,
+    });
+    loading.present();
+    return loading;
+  }
+
+  async deletePatent(slidingItem: HTMLIonItemSlidingElement, patentId: string) {
+    const alert = await this.alertCtrl.create({
+      header: "Delete Confirmatiom",
+      message: "Would you like to delete this Patent?",
+      buttons: [
+        {
+          text: "Cancel",
+          handler: () => {
+            // they clicked the cancel button, do not remove the session
+            // close the sliding item and hide the option buttons
+            slidingItem.close();
+          },
+        },
+        {
+          text: "Delete",
+          handler: async () => {
+            const loading = await this.showLoading();
+            const patentDocRef = doc(
+              this.firestore,
+              `${this.patentsCollection.path}/${patentId}`
+            );
+            await deleteDoc(patentDocRef);
+            await loading.dismiss();
+            slidingItem.close();
+          },
+        },
+      ],
+    });
+    // now present the alert on top of all other content
+    await alert.present();
   }
 
   updateSchedule() {

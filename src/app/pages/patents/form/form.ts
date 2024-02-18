@@ -1,90 +1,83 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild, inject } from "@angular/core";
 
 import { FormsModule, NgForm, ReactiveFormsModule } from "@angular/forms";
-import { BehaviorSubject, Observable, debounceTime, of, switchMap } from "rxjs";
 import { CommonModule } from "@angular/common";
+import { IonicModule, LoadingController, NavController } from "@ionic/angular";
 import {
-  MatAutocompleteModule,
-  MatAutocompleteSelectedEvent,
-} from "@angular/material/autocomplete";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatRadioModule } from "@angular/material/radio";
-import { IonicModule } from "@ionic/angular";
-import { MatInputModule } from "@angular/material/input";
-import { MatSelectModule } from "@angular/material/select";
-import { CountryStateCityService } from "../../../shared/country-state-city/country-state-city.service";
-import { AutocompleteOption } from "../../../shared/auto-complete/auto-complete.component";
-import { map } from "cypress/types/jquery";
+  Firestore,
+  addDoc,
+  collection,
+  collectionData,
+  DocumentReference,
+  doc,
+  updateDoc,
+} from "@angular/fire/firestore";
+import { Observable } from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
+import { getDoc } from "@firebase/firestore";
+import { IPatent } from "../IPatent";
 
 @Component({
   selector: "patent-form",
   standalone: true,
-  imports: [
-    CommonModule,
-    IonicModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatAutocompleteModule,
-    MatFormFieldModule,
-    MatRadioModule,
-    MatInputModule,
-    MatSelectModule,
-  ],
+  imports: [CommonModule, IonicModule, FormsModule, ReactiveFormsModule],
   styleUrls: ["./form.scss"],
   templateUrl: "form.html",
 })
 export class FormPage {
+  @ViewChild("form") form: NgForm;
   defaultHref = "/app/tabs/patents";
-  countrySearch = new BehaviorSubject<string>("");
-  statesSearch = new BehaviorSubject<string>("");
-  citiesSearch = new BehaviorSubject<string>("");
-  countries$: Observable<AutocompleteOption[]>;
-  states$: Observable<AutocompleteOption[]>;
-  cities$: Observable<AutocompleteOption[]>;
+  firestore: Firestore = inject(Firestore);
+  router: Router = inject(Router);
+  route: ActivatedRoute = inject(ActivatedRoute);
+  navController: NavController = inject(NavController);
+  loadingCtrl: LoadingController = inject(LoadingController);
+  patentsCollection = collection(this.firestore, "patents");
+  patentDocRef: DocumentReference;
+  patentInfo: any;
+  patentId = "";
+  patents$: Observable<IPatent[]> = collectionData(this.patentsCollection, {
+    idField: "id",
+  }) as Observable<IPatent[]>;
 
-  constructor(private service: CountryStateCityService) {
-    this.countries$ = this.initializeAutocompleteStream(this.countrySearch, this.service.getCountries());
-    this.states$ = this.initializeAutocompleteStream(this.statesSearch, []);
-    this.cities$ = this.initializeAutocompleteStream(this.citiesSearch, []);
+  constructor() {
+    const sub = this.route.params.subscribe(async ({ patentId }) => {
+      const loading = await this.showLoading();
+      console.log(patentId);
+      this.patentId = patentId;
+      sub.unsubscribe();
+      this.patentDocRef = doc(
+        this.firestore,
+        `${this.patentsCollection.path}/${this.patentId}`
+      );
+      this.patentInfo = (await getDoc(this.patentDocRef)).data();
+      this.form.resetForm(this.patentInfo);
+      await loading.dismiss();
+    });
   }
 
-  private initializeAutocompleteStream(searchSource: BehaviorSubject<string>, initialOptions: AutocompleteOption[]): Observable<AutocompleteOption[]> {
-    return searchSource.pipe(
-      debounceTime(100),
-      switchMap((search: string) =>
-        of(
-          search.trim().toLowerCase().length
-            ? initialOptions.filter(({ label }) =>
-                label.toLowerCase().includes(search.trim().toLowerCase())
-              )
-            : initialOptions
-        )
-      )
-    );
+  async showLoading() {
+    const loading = await this.loadingCtrl.create({
+      message: "Please wait...",
+      duration: null,
+    });
+    loading.present();
+    return loading;
   }
 
-  filterStatesByCountry($event: MatAutocompleteSelectedEvent): void {
-    this.states$ = this.initializeAutocompleteStream(this.statesSearch, this.service.getStates($event.option.value.id));
-  }
-
-  filterCitiesByState(form: NgForm): void {
-    this.cities$ = this.initializeAutocompleteStream(
-      this.citiesSearch,
-      this.service.getCities(form.value.country.id, form.value.state.id)
-    );
-  }
-
-  submitForm(form: { valid: any; value: any }): void {
-    if (form.valid) {
-      console.log(form.value);
+  async addPatent(form: NgForm) {
+    const loading = await this.showLoading();
+    if (this.patentId && this.patentId.length > 0) {
+      await updateDoc(this.patentDocRef, form.value);
+    } else {
+      await addDoc(this.patentsCollection, form.value);
     }
+    form.resetForm({});
+    await loading.dismiss();
+    this.goBack();
   }
 
-  filterOptions($event: InputEvent, source: BehaviorSubject<string>) {
-    source.next(($event.target as HTMLInputElement).value);
-  }
-
-  displayWith(option: AutocompleteOption): string {
-    return option && option.label ? option.label : "";
+  goBack() {
+    this.navController.back();
   }
 }
