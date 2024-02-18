@@ -39,13 +39,8 @@ export class Page implements OnInit {
   }) as Observable<IPatent[]>;
 
   ios: boolean;
-  dayIndex = 0;
   queryText = "";
-  segment = "all";
   excludeTracks: any = [];
-  shownSessions: any = [];
-  groups: any = [];
-  confDate: string;
   showSearchbar: boolean;
 
   constructor(
@@ -61,8 +56,6 @@ export class Page implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.updateSchedule();
-
     this.ios = this.config.get("mode") === "ios";
   }
 
@@ -107,24 +100,6 @@ export class Page implements OnInit {
     await alert.present();
   }
 
-  updateSchedule() {
-    // Close any open sliding items when the patents updates
-    if (this.scheduleList) {
-      this.scheduleList.closeSlidingItems();
-    }
-
-    this.confData
-      .getTimeline(
-        this.dayIndex,
-        this.queryText,
-        this.excludeTracks,
-        this.segment
-      )
-      .subscribe((data: any) => {
-        this.shownSessions = data.shownSessions;
-        this.groups = data.groups;
-      });
-  }
 
   async presentFilter() {
     const modal = await this.modalCtrl.create({
@@ -137,7 +112,6 @@ export class Page implements OnInit {
     const { data } = await modal.onWillDismiss();
     if (data) {
       this.excludeTracks = data;
-      this.updateSchedule();
     }
   }
 
@@ -195,8 +169,6 @@ export class Page implements OnInit {
           handler: () => {
             // they want to remove this session from their favorites
             this.user.removeFavorite(sessionData.name);
-            this.updateSchedule();
-
             // close the sliding item and hide the option buttons
             slidingItem.close();
           },
@@ -207,13 +179,4 @@ export class Page implements OnInit {
     await alert.present();
   }
 
-  async openSocial(network: string, fab: HTMLIonFabElement) {
-    const loading = await this.loadingCtrl.create({
-      message: `Posting to ${network}`,
-      duration: Math.random() * 1000 + 500,
-    });
-    await loading.present();
-    await loading.onWillDismiss();
-    fab.close();
-  }
 }

@@ -19,11 +19,11 @@ import { UserData } from "./providers/user-data";
 })
 export class AppComponent implements OnInit {
   appPages = [
-    /* {
+    {
       title: "Schedule",
       url: "/app/tabs/schedule",
       icon: "calendar",
-    }, */
+    },
     {
       title: "Patents",
       url: "/app/tabs/patents",
