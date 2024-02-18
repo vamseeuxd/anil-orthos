@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultHref"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngIf="patent">
+    <ion-card-header>
+      <ion-card-title> {{ patent.name }} </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>Gender : {{ patent.gender }}</p>
+      <p>Age: {{ patent.age }}</p>
+      <p>Street: {{ patent.street }}</p>
+      <p>City: {{ patent.city }}</p>
+      <p>State: {{ patent.state }}</p>
+      <p>Country: {{ patent.country }}</p>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- <div *ngIf="detail" class="ion-padding">
+    <h1>{{detail.name}}</h1>
+    <span *ngFor="let track of detail?.tracks" [class]="'detail-track-'+track.toLowerCase()">{{track}}</span>
+    <p>{{detail.description}}</p>
+    <ion-text color="medium">
+      {{detail.timeStart}} &ndash; {{detail.timeEnd}}
+      <br /> {{detail.location}}
+    </ion-text>
+  </div>
+
+  <ion-list>
+    <ion-item (click)="sessionClick('watch')" button>
+      <ion-label color="primary">Watch</ion-label>
+    </ion-item>
+    <ion-item (click)="sessionClick('add to calendar')" button>
+      <ion-label color="primary">Add to Calendar</ion-label>
+    </ion-item>
+    <ion-item (click)="sessionClick('mark as unwatched')" button>
+      <ion-label color="primary">Mark as Unwatched</ion-label>
+    </ion-item>
+    <ion-item (click)="sessionClick('download video')" button>
+      <ion-label color="primary">Download Video</ion-label>
+      <ion-icon slot="end" color="primary" size="small" name="cloud-download"></ion-icon>
+    </ion-item>
+    <ion-item (click)="sessionClick('leave feedback')" button>
+      <ion-label color="primary">Leave Feedback</ion-label>
+    </ion-item>
+  </ion-list> -->
+</ion-content>

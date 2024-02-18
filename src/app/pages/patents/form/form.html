@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button #backBtn [defaultHref]="defaultHref"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<!-- prettier-ignore -->
+<ion-content>
+  <form class="container-fluid py-3" #form="ngForm" (submit)="addPatent(form)">
+    <!--
+      helperText="Enter a valid 10 digits Mobile Number" errorText="Enter a valid 10 digits Mobile Number"
+    -->
+      <div class="mb-3 px-2"> <ion-input  required name="name"    label="Name"    label-placement="floating" fill="outline" ngModel></ion-input> </div>
+      <div class="mb-3 px-2"> <ion-select required name="gender"  label="Gender"  label-placement="floating" fill="outline" ngModel> <ion-select-option value="male">Male</ion-select-option> <ion-select-option value="female">Female</ion-select-option> <ion-select-option value="other">Other</ion-select-option> </ion-select> </div>
+      <div class="mb-3 px-2"> <ion-input  required name="age"     label="Age"     label-placement="floating" fill="outline" ngModel type="number" [min]="1" [max]="100"></ion-input> </div>
+      <div class="mb-3 px-2"> <ion-input  required name="mobile"  label="Mobile"  label-placement="floating" fill="outline" ngModel minlength="10" maxlength="10" type="tel" helperText="Enter a valid 10 digits Mobile Number" errorText="Enter a valid 10 digits Mobile Number"></ion-input> </div>
+      <div class="mb-3 px-2"> <ion-input  required name="street"  label="Street"  label-placement="floating" fill="outline" ngModel></ion-input> </div>
+      <div class="mb-3 px-2"> <ion-input  required name="city"    label="City"    label-placement="floating" fill="outline" ngModel></ion-input> </div>
+      <div class="mb-3 px-2"> <ion-input  required name="state"   label="State"   label-placement="floating" fill="outline" ngModel></ion-input> </div>
+      <div class="mb-3 px-2"> <ion-input  required name="country" label="Country" label-placement="floating" fill="outline" ngModel></ion-input> </div>
+      <div class="mb-3 px-2">
+        <div class="row">
+          <div class="col">
+            <ion-button [disabled]="form.invalid" type="submit" expand="block">Save</ion-button>
+          </div>
+          <div class="col"><ion-button color="dark" (click)="goBack()" expand="full">Cancel</ion-button></div>
+        </div>
+      </div>
+  </form>
+
+</ion-content>
