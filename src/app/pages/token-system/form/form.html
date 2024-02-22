@@ -1,0 +1,79 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button #backBtn [defaultHref]="defaultHref"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<!-- prettier-ignore -->
+<ion-content>
+  <form class="container-fluid py-3" #form="ngForm" (submit)="addToken(form)">
+
+    <!-- ************ Visit Purpose ************ -->
+    <div class="mb-3 px-2"> <ion-input required name="visitPurpose" label="Visit Purpose" label-placement="floating" fill="outline" ngModel ></ion-input> </div>
+    <!-- ************ Visit Purpose ************ -->
+
+    <!-- ************ Toekn Number ************ -->
+    <div class="mb-3 px-2"> <ion-input type="number" required name="number" label="Toekn Number" label-placement="floating" fill="outline" ngModel ></ion-input> </div>
+    <!-- ************ Toekn Number ************ -->
+
+    <!-- ************ Patent Id ************ -->
+    <!-- <div class="mb-3 px-2"> <ion-input required name="patentId" label="Patent Id" label-placement="floating" fill="outline" ngModel ></ion-input> </div> -->
+    <!-- ************ Patent Id ************ -->
+
+    <!-- ************ Patent Id ************ -->
+    <div class="mb-3 px-2">
+      <ion-select (ionDismiss)="patents = masterPatents" appSearchbar searchbarPlaceholder="Search Patent" (searchInput)="filterPatentList($event)" name="patentId" ngModel required fill="outline" label="Default label" label-placement="floating">
+        <ion-select-option *ngFor="let patent of patents" [value]="patent.id">{{patent.label}}</ion-select-option>
+      </ion-select>
+    </div>
+    <!-- ************ Patent Id ************ -->
+
+    <!-- ************ Arrival Time ************ -->
+    <input required name="arrivalTime" ngModel type="hidden" />
+    <ng-container *ngTemplateOutlet="dataPickerRef; context: {config:{required:true, label:'Arrival Time', name:'arrivalTime'}}" ></ng-container>
+    <!-- ************ Arrival Time ************ -->
+
+    <!-- ************ Temperature ************ -->
+    <div class="mb-3 px-2"> <ion-input type="number" required name="temperature" label="Temperature" label-placement="floating" fill="outline" ngModel ></ion-input> </div>
+    <!-- ************ Temperature ************ -->
+
+    <!-- ************ Heart Rate ************ -->
+    <div class="mb-3 px-2"> <ion-input type="number" required name="heartRate" label="Heart Rate" label-placement="floating" fill="outline" ngModel ></ion-input> </div>
+    <!-- ************ Heart Rate ************ -->
+
+    <!-- ************ Blood Pressure ************ -->
+    <div class="mb-3 px-2"> <ion-input type="number" required name="bloodPressure" label="Blood Pressure" label-placement="floating" fill="outline" ngModel ></ion-input> </div>
+    <!-- ************ Blood Pressure ************ -->
+
+    <!-- ************ Doctor CheckUp Start ************ -->
+    <input required name="doctorCheckUpStart" ngModel type="hidden" />
+    <ng-container *ngTemplateOutlet="dataPickerRef; context: {config:{required:true, label:'Doctor CheckUp Start', name:'doctorCheckUpStart'}}" ></ng-container>
+    <!-- ************ Doctor CheckUp Start ************ -->
+
+    <!-- ************ Doctor CheckUp End ************ -->
+    <input required name="doctorCheckUpEnd" ngModel type="hidden" />
+    <ng-container *ngTemplateOutlet="dataPickerRef; context: {config:{required:true, label:'Doctor CheckUp End', name:'doctorCheckUpEnd'}}" ></ng-container>
+    <!-- ************ Doctor CheckUp End ************ -->
+
+    <!-- ************ Save & Cancel Buttons ************ -->
+    <div class="mb-3 px-2">
+      <div class="row">
+        <div class="col"> <ion-button [disabled]="form.invalid" type="submit" expand="block" >Save</ion-button > </div>
+        <div class="col"> <ion-button color="dark" (click)="goBack()" expand="full" >Cancel</ion-button > </div>
+      </div>
+    </div>
+    <!-- ************ Save & Cancel Buttons ************ -->
+
+    <ng-template #dataPickerRef let-config="config">
+      <div class="mb-3 px-2">
+        <ion-input readonly (click)="datetimeRef.present()" [required]="config.required" [label]="config.label" label-placement="floating" fill="outline" [value]="form.value[config.name]|date:'MMM dd yyyy - hh:mm a'" > </ion-input>
+        <ion-datetime-button class="d-none" [datetime]="'datetime_'+config.name" ></ion-datetime-button>
+      </div>
+      <ion-modal [keepContentsMounted]="true" #datetimeRef>
+        <ng-template> <ion-datetime [id]="'datetime_'+config.name" [showDefaultButtons]="true" (ionChange)="setValue(config.name,$event.detail.value, form)" > </ion-datetime> </ng-template>
+      </ion-modal>
+    </ng-template>
+  </form>
+
+</ion-content>

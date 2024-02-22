@@ -1,0 +1,91 @@
+<ion-header translucent="true">
+  <ion-toolbar>
+    <ion-buttons *ngIf="!showSearchbar" slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title *ngIf="!ios && !showSearchbar">Tokens</ion-title>
+    <ion-searchbar
+      *ngIf="showSearchbar"
+      showCancelButton="always"
+      [(ngModel)]="queryText"
+      (ionCancel)="showSearchbar = false"
+      placeholder="Search"
+    ></ion-searchbar>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="!ios && !showSearchbar" (click)="showSearchbar = true">
+        <ion-icon slot="icon-only" name="search"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="!showSearchbar" (click)="presentFilter()">
+        <span *ngIf="ios">Filter</span>
+        <span *ngIf="!ios">
+          <ion-icon slot="icon-only" name="options"></ion-icon>
+        </span>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Tokens</ion-title>
+    </ion-toolbar>
+    <ion-toolbar>
+      <ion-searchbar
+        [(ngModel)]="queryText"
+        placeholder="Search"
+      ></ion-searchbar>
+    </ion-toolbar>
+  </ion-header>
+
+  <ng-container *ngIf="tokensWithPatentInfo$ | async as tokens">
+    <ion-accordion-group #scheduleList>
+      <ion-accordion
+        *ngFor="let token of tokens"
+        [value]="token.id"
+        [hidden]="token.hide"
+      >
+        <ion-item slot="header" color="light">
+          <ion-label>
+            <h2 class="d-flex align-items-center">
+              {{ token.patent.name }}
+              <h1 class="fs-3 mx-2 px-3 border-start border-end text-danger">
+                {{ token.number }}
+              </h1>
+              <ion-button (click)="$event.stopPropagation();speakText('Token Number : ' + token.number + ', ' + token.patent.name)" class="ms-auto" >
+                <ion-icon class="me-2" name="megaphone"></ion-icon>
+              </ion-button>
+              <ion-button (click)="$event.stopPropagation();" routerLink="/app/tabs/tokens/edit/{{token.id}}" class="ms-2" >
+                <ion-icon class="me-2" name="create"></ion-icon>
+              </ion-button>
+              <ion-button (click)="$event.stopPropagation();deleteToken(token.id)" class="ms-2" >
+                <ion-icon class="me-2" name="trash"></ion-icon>
+              </ion-button>
+            </h2>
+          </ion-label>
+        </ion-item>
+
+        <div class="ion-padding" slot="content">
+          <!-- prettier-ignore -->
+          <ion-list>
+            <ion-item >Arrival Time : {{ (token.arrivalTime.seconds * 1000) | date:'h:mm a' }} </ion-item>
+            <ion-item>Visit Purpose : {{token.visitPurpose}} </ion-item>
+            <ion-item>Temperature : {{token.temperature}} °C </ion-item>
+            <ion-item>Heart Rate : {{token.heartRate}} BPM </ion-item>
+            <ion-item>Blood Pressure : {{token.bloodPressure}} mmHg </ion-item>
+            <ion-item >Doctor's Check-up Start : {{ (token.doctorCheckUpStart.seconds * 1000) | date:'h:mm a' }} </ion-item>
+            <ion-item >Doctor's Check-up End : {{ (token.doctorCheckUpEnd.seconds * 1000) | date:'h:mm a' }} </ion-item>
+          </ion-list>
+        </div>
+      </ion-accordion>
+    </ion-accordion-group>
+
+    <ion-list-header *ngIf="tokens <= 0"> No Tokens Found </ion-list-header>
+  </ng-container>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" #fab>
+    <ion-fab-button routerLink="/app/tabs/tokens/add">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

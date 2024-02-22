@@ -3,6 +3,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { TabsPage } from "./tabs-page";
 import { Page as SchedulePage } from "../schedule/page";
 import { Page as PatentsPage } from "../patents/page";
+import { Page as TokensPage } from "../token-system/page";
 
 const routes: Routes = [
   {
@@ -48,6 +49,32 @@ const routes: Routes = [
             path: "edit/:patentId",
             loadComponent: () =>
               import("../patents/form/form").then((c) => c.FormPage),
+          },
+        ],
+      },
+      {
+        path: "tokens",
+        children: [
+          {
+            path: "",
+            component: TokensPage,
+          },
+          {
+            path: "details/:patentId",
+            loadChildren: () =>
+              import("../patents/detail/detail.module").then(
+                (m) => m.DetailModule
+              ),
+          },
+          {
+            path: "add",
+            loadComponent: () =>
+              import("../token-system/form/form").then((c) => c.FormPage),
+          },
+          {
+            path: "edit/:tokenId",
+            loadComponent: () =>
+              import("../token-system/form/form").then((c) => c.FormPage),
           },
         ],
       },

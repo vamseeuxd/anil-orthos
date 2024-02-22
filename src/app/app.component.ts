@@ -10,6 +10,7 @@ import { SplashScreen } from "@capacitor/splash-screen";
 import { Storage } from "@ionic/storage-angular";
 
 import { UserData } from "./providers/user-data";
+import { environment } from "../environments/environment";
 
 @Component({
   selector: "app-root",
@@ -28,6 +29,11 @@ export class AppComponent implements OnInit {
       title: "Patents",
       url: "/app/tabs/patents",
       icon: "people",
+    },
+    {
+      title: "Tokens",
+      url: "/app/tabs/tokens",
+      icon: "pricetags",
     },
     /* {
       title: "Speakers",
@@ -65,18 +71,20 @@ export class AppComponent implements OnInit {
     this.checkLoginStatus();
     this.listenForLoginEvents();
 
-    const isNewVersion = await this.swUpdate.checkForUpdate();
-    if (isNewVersion) {
-      const toast = await this.toastCtrl.create({
-        message: "Update available!",
-        position: "bottom",
-        buttons: [{ role: "cancel", text: "Reload" }],
-      });
-      await toast.present();
-      toast
-        .onDidDismiss()
-        .then(() => this.swUpdate.activateUpdate())
-        .then(() => window.location.reload());
+    if (environment.production) {
+      const isNewVersion = await this.swUpdate.checkForUpdate();
+      if (isNewVersion) {
+        const toast = await this.toastCtrl.create({
+          message: "Update available!",
+          position: "bottom",
+          buttons: [{ role: "cancel", text: "Reload" }],
+        });
+        await toast.present();
+        toast
+          .onDidDismiss()
+          .then(() => this.swUpdate.activateUpdate())
+          .then(() => window.location.reload());
+      }
     }
   }
 
